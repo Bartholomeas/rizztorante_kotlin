@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pam.rizztorante.ui.components.BottomNavbar
+import com.pam.rizztorante.ui.screens.LoginScreen
 import com.pam.rizztorante.ui.screens.MenuScreen
 import com.pam.rizztorante.ui.theme.RizztoranteTheme
 
@@ -26,15 +27,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RizztoranteApp() {
   val navController = rememberNavController()
+  val currentRoute = navController.currentBackStackEntry?.destination?.route
+  val showBottomBar = currentRoute != "login"
 
   Scaffold(
           modifier = Modifier.fillMaxSize(),
-          bottomBar = { BottomNavbar(navController = navController) }
+          bottomBar = {
+            if (showBottomBar) {
+              BottomNavbar(navController = navController)
+            }
+          }
   ) { innerPadding ->
     NavHost(
             navController = navController,
-            startDestination = "menu",
+            startDestination = "login",
             modifier = Modifier.padding(innerPadding)
-    ) { composable("menu") { MenuScreen() } }
+    ) {
+      composable("login") { LoginScreen(navController) }
+      composable("menu") { MenuScreen() }
+    }
   }
 }

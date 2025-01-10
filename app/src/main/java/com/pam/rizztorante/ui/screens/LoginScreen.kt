@@ -8,17 +8,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.pam.rizztorante.model.LoginRequest
+import com.pam.rizztorante.network.api.ApiClient
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavController) {
   var email by remember { mutableStateOf("") }
   var password by remember { mutableStateOf("") }
+  var isLoading by remember { mutableStateOf(false) }
+  var error by remember { mutableStateOf<String?>(null) }
+
+  val scope = rememberCoroutineScope()
 
   Column(
           modifier = Modifier.fillMaxSize().padding(16.dp),
           horizontalAlignment = Alignment.CenterHorizontally,
           verticalArrangement = Arrangement.Center
   ) {
+    if (error != null) {
+      Text(
+              text = error!!,
+              color = MaterialTheme.colorScheme.error,
+              modifier = Modifier.padding(vertical = 8.dp)
+      )
+    }
+
     OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -36,10 +51,35 @@ fun LoginScreen(navController: NavController) {
 
     Button(
             onClick = {
-              // TODO: Implement login logic
-              navController.navigate("menu") { popUpTo("login") { inclusive = true } }
+              scope.launch {
+                isLoading = true
+                error = null
+                try {
+                  val response = ApiClient.apiService.login(LoginRequest(email, password))
+                  if (response.isSuccessful) {
+                    navController.navigate("menu") { popUpTo("login") { inclusive = true } }
+                  } else {
+                    error = "Błędne dane logowania"
+                  }
+                } catch (e: Exception) {
+                  println("ERROR::: ${e.message}")
+                  error = "Błąd połączenia z serwerem"
+                } finally {
+                  isLoading = false
+                }
+              }
             },
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
-    ) { Text("Zaloguj się") }
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+            enabled = !isLoading
+    ) {
+      if (isLoading) {
+        CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                color = MaterialTheme.colorScheme.onPrimary
+        )
+      } else {
+        Text("Zaloguj się")
+      }
+    }
   }
 }

@@ -23,6 +23,7 @@ import com.pam.rizztorante.model.AddToCartRequest
 import com.pam.rizztorante.model.CartItem
 import com.pam.rizztorante.model.CartItemResponse
 import com.pam.rizztorante.network.api.ApiClient
+import com.pam.rizztorante.ui.components.cart.CartItemCard
 import kotlinx.coroutines.launch
 
 @Composable
@@ -91,6 +92,13 @@ fun CartScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        Text(
+            text = "Witamy w aplikacji Rizztorante",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(bottom = 16.dp),
+            fontWeight = FontWeight.Bold
+        )
+
         if (isLoading) {
             CircularProgressIndicator()
         } else {
@@ -132,56 +140,6 @@ fun CartScreen() {
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             ) { Text("Do płatności") }
-        }
-    }
-
-
-}
-
-@Composable
-fun CartItemCard(item: CartItem, onRemove: () -> Unit, onQuantityChange: (Int) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-    ) {
-        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = item.coreImageUrl.url,
-                contentDescription = item.name,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(R.drawable.ic_launcher_foreground),
-                error = painterResource(R.drawable.ic_launcher_foreground)
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = item.name, style = MaterialTheme.typography.titleMedium)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { if (item.quantity > 1) onQuantityChange(item.quantity - 1) }) {
-                        Icon(Icons.Default.Remove, contentDescription = "Zmniejsz ilość")
-                    }
-                    Text(
-                        text = item.quantity.toString(),
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                    IconButton(onClick = { onQuantityChange(item.quantity + 1) }) {
-                        Icon(Icons.Default.Add, contentDescription = "Zwiększ ilość")
-                    }
-                }
-                Text(
-                    text = "%.2f PLN".format(item.price * item.quantity / 100.0),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            IconButton(onClick = onRemove) {
-                Icon(Icons.Default.Delete, contentDescription = "Usuń z koszyka")
-            }
         }
     }
 }

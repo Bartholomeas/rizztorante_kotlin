@@ -7,6 +7,7 @@ object Endpoints {
     const val CONNECTION_TIMEOUT = 3000
 
     const val LOGIN = "${BASE_URL}auth/login"
+    const val LOGOUT = "${BASE_URL}auth/logout"
     const val MENUS = "${BASE_URL}menus"
     const val MENU_CATEGORIES = "${BASE_URL}menus/{menuId}/categories"
 

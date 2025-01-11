@@ -18,6 +18,9 @@ interface ApiService {
     @POST(Endpoints.LOGIN)
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
+    @DELETE(Endpoints.LOGOUT)
+    suspend fun logout(): Response<Unit>
+
     @GET(Endpoints.MENUS)
     suspend fun getMenus(): Response<List<MenuResponse>>
 

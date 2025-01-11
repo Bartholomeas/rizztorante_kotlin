@@ -10,34 +10,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun MenuHeader(
-    name: String,
-    description: String?,
-    isExpanded: Boolean,
-    onExpandClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-            Text(text = name, style = MaterialTheme.typography.titleLarge)
-            if (description != null) {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-        IconButton(onClick = onExpandClick) {
-            Icon(
-                imageVector =
-                if (isExpanded) Icons.Default.KeyboardArrowUp
-                else Icons.Default.KeyboardArrowDown,
-                contentDescription = if (isExpanded) "Zwiń" else "Rozwiń"
-            )
-        }
+fun MenuHeader(name: String, description: String?, isExpanded: Boolean, onExpandClick: () -> Unit) {
+  Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
+  ) {
+    Column {
+      Text(text = name, style = MaterialTheme.typography.titleLarge)
+      if (description != null) {
+        Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+      }
     }
-} 
+    IconButton(onClick = onExpandClick) {
+      Icon(
+              imageVector =
+                      if (isExpanded) Icons.Default.KeyboardArrowUp
+                      else Icons.Default.KeyboardArrowDown,
+              contentDescription = if (isExpanded) "Zwiń" else "Rozwiń"
+      )
+    }
+  }
+}

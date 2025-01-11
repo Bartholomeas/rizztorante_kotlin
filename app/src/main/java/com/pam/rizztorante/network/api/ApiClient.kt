@@ -1,14 +1,30 @@
 package com.pam.rizztorante.network.api
 
 import java.util.concurrent.TimeUnit
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-  private val okHttpClient =
+  private val client =
           OkHttpClient.Builder()
+                  .cookieJar(
+                          object : CookieJar {
+                            private var cookies = listOf<Cookie>()
+
+                            override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+                              this.cookies = cookies
+                            }
+
+                            override fun loadForRequest(url: HttpUrl): List<Cookie> {
+                              return cookies
+                            }
+                          }
+                  )
                   .addInterceptor(
                           HttpLoggingInterceptor().apply {
                             level = HttpLoggingInterceptor.Level.BODY
@@ -21,7 +37,7 @@ object ApiClient {
   private val retrofit =
           Retrofit.Builder()
                   .baseUrl(Endpoints.BASE_URL)
-                  .client(okHttpClient)
+                  .client(client)
                   .addConverterFactory(GsonConverterFactory.create())
                   .build()
 

@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -23,9 +24,16 @@ fun LoginScreen(navController: NavController) {
 
   Column(
           modifier = Modifier.fillMaxSize().padding(16.dp),
-          horizontalAlignment = Alignment.CenterHorizontally,
-          verticalArrangement = Arrangement.Center
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
   ) {
+    Text(
+            text = "Witamy w aplikacji Rizztorante",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(bottom = 16.dp),
+            fontWeight = FontWeight.Bold
+    )
+
     if (error != null) {
       Text(
               text = error!!,

@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.pam.rizztorante.R
 import com.pam.rizztorante.model.AddToCartRequest
@@ -25,7 +26,7 @@ import com.pam.rizztorante.network.api.ApiClient
 import kotlinx.coroutines.launch
 
 @Composable
-fun MenuItem(position: MenuPosition) {
+fun MenuItem(position: MenuPosition, navController: NavController) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     var quantity by remember { mutableStateOf(1) }
@@ -47,11 +48,9 @@ fun MenuItem(position: MenuPosition) {
             error = painterResource(R.drawable.ic_launcher_foreground)
         )
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        ) {
+        Column(modifier = Modifier
+            .weight(1f)
+            .padding(start = 8.dp)) {
             Text(text = position.name, fontWeight = FontWeight.Bold)
             Text(text = position.description, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
@@ -67,10 +66,7 @@ fun MenuItem(position: MenuPosition) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { if (quantity > 1) quantity-- }) {
-                    Icon(
-                        imageVector = Icons.Default.Remove,
-                        contentDescription = "Zmniejsz ilość"
-                    )
+                    Icon(imageVector = Icons.Default.Remove, contentDescription = "Zmniejsz ilość")
                 }
                 Text(text = quantity.toString(), modifier = Modifier.padding(horizontal = 8.dp))
                 IconButton(onClick = { quantity++ }) {
@@ -101,6 +97,11 @@ fun MenuItem(position: MenuPosition) {
                 },
                 modifier = Modifier.padding(top = 4.dp)
             ) { Text("Dodaj") }
+
+            Button(
+                onClick = { navController.navigate("position/${position.id}") },
+                modifier = Modifier.padding(top = 4.dp)
+            ) { Text("Szczegóły") }
         }
     }
 }

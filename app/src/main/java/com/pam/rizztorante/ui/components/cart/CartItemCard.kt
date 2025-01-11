@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pam.rizztorante.R
 import com.pam.rizztorante.model.CartItem
-import com.pam.rizztorante.model.CartItemResponse
-
 
 @Composable
 fun CartItemCard(item: CartItem, onRemove: () -> Unit, onQuantityChange: (Int) -> Unit) {

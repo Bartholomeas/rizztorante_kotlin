@@ -16,6 +16,7 @@ import com.pam.rizztorante.ui.components.BottomNavbar
 import com.pam.rizztorante.ui.screens.CartScreen
 import com.pam.rizztorante.ui.screens.LoginScreen
 import com.pam.rizztorante.ui.screens.MenuScreen
+import com.pam.rizztorante.ui.screens.PositionDetailsScreen
 import com.pam.rizztorante.ui.theme.RizztoranteTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,8 +48,12 @@ fun RizztoranteApp() {
             modifier = Modifier.padding(innerPadding)
     ) {
       composable("login") { LoginScreen(navController) }
-      composable("menu") { MenuScreen() }
+      composable("menu") { MenuScreen(navController) }
       composable("cart") { CartScreen() }
+      composable("position/{positionId}") { backStackEntry ->
+        val positionId = backStackEntry.arguments?.getString("positionId") ?: ""
+        PositionDetailsScreen(positionId, navController)
+      }
     }
   }
 }

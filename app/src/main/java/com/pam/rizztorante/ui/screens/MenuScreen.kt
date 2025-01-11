@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.pam.rizztorante.model.MenuItem
 import com.pam.rizztorante.model.MenuResponse
 import com.pam.rizztorante.network.api.ApiClient
-import com.pam.rizztorante.ui.components.MenuDropdown
+import com.pam.rizztorante.ui.components.menu.MenuDropdown
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,9 +39,11 @@ fun MenuScreen() {
         }
     }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(
             text = "Wybierz pozycję z menu",
             style = MaterialTheme.typography.headlineMedium,
@@ -85,9 +87,11 @@ fun MenuSection(
 ) {
     var isExpanded by remember { mutableStateOf(expanded) }
 
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier

@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.pam.rizztorante.model.MenuCategoryResponse
 import com.pam.rizztorante.model.MenuResponse
 import com.pam.rizztorante.network.api.ApiClient
@@ -12,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MenuDropdown(menu: MenuResponse) {
+fun MenuDropdown(menu: MenuResponse, navController: NavController) {
     var isExpanded by remember { mutableStateOf(false) }
     var categories by remember { mutableStateOf<List<MenuCategoryResponse>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
@@ -42,7 +43,7 @@ fun MenuDropdown(menu: MenuResponse) {
             )
 
             if (isExpanded) {
-                MenuContent(isLoading = isLoading, error = error, categories = categories)
+                MenuContent(isLoading = isLoading, error = error, categories = categories, navController=navController)
             }
         }
     }

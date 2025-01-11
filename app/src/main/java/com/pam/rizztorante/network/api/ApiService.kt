@@ -1,5 +1,6 @@
 package com.pam.rizztorante.network.api
 
+import com.pam.rizztorante.model.AddToCartRequest
 import com.pam.rizztorante.model.LoginRequest
 import com.pam.rizztorante.model.LoginResponse
 import com.pam.rizztorante.model.MenuCategoryResponse
@@ -21,4 +22,7 @@ interface ApiService {
     suspend fun getMenuCategoriesWithItems(
         @Path("menuId") menuId: String,
     ): Response<List<MenuCategoryResponse>>
+
+    @POST(Endpoints.ADD_CART_ITEM)
+    suspend fun addToCart(@Body request: AddToCartRequest): Response<Unit>
 }

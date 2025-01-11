@@ -19,36 +19,36 @@ import com.pam.rizztorante.ui.screens.MenuScreen
 import com.pam.rizztorante.ui.theme.RizztoranteTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent { RizztoranteTheme { RizztoranteApp() } }
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContent { RizztoranteTheme { RizztoranteApp() } }
+  }
 }
 
 @Composable
 fun RizztoranteApp() {
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = currentRoute != "login"
+  val navController = rememberNavController()
+  val navBackStackEntry by navController.currentBackStackEntryAsState()
+  val currentRoute = navBackStackEntry?.destination?.route
+  val showBottomBar = currentRoute != "login"
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = {
+  Scaffold(
+          modifier = Modifier.fillMaxSize(),
+          bottomBar = {
             if (showBottomBar) {
-                BottomNavbar(navController)
+              BottomNavbar(navController)
             }
-        }
-    ) { innerPadding ->
-        NavHost(
+          }
+  ) { innerPadding ->
+    NavHost(
             navController = navController,
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("login") { LoginScreen(navController) }
-            composable("menu") { MenuScreen() }
-            composable("cart") { CartScreen() }
-        }
+    ) {
+      composable("login") { LoginScreen(navController) }
+      composable("menu") { MenuScreen() }
+      composable("cart") { CartScreen() }
     }
+  }
 }

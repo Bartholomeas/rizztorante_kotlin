@@ -9,37 +9,21 @@ import androidx.compose.ui.unit.dp
 import com.pam.rizztorante.model.MenuCategoryResponse
 
 @Composable
-fun MenuContent(
-    isLoading: Boolean,
-    error: String?,
-    categories: List<MenuCategoryResponse>
-) {
-    when {
-        isLoading -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }
-
-        error != null -> {
-            Text(
-                text = error,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-
-        categories.isEmpty() -> {
-            Text(text = "Brak dostępnych kategorii", modifier = Modifier.padding(8.dp))
-        }
-
-        else -> {
-            categories.forEach { category -> CategoryItem(category) }
-        }
+fun MenuContent(isLoading: Boolean, error: String?, categories: List<MenuCategoryResponse>) {
+  when {
+    isLoading -> {
+      Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+      }
     }
-} 
+    error != null -> {
+      Text(text = error, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(8.dp))
+    }
+    categories.isEmpty() -> {
+      Text(text = "Brak dostępnych kategorii", modifier = Modifier.padding(8.dp))
+    }
+    else -> {
+      categories.forEach { category -> CategoryItem(category) }
+    }
+  }
+}

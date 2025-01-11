@@ -8,6 +8,7 @@ object Endpoints {
 
   const val LOGIN = "${BASE_URL}auth/login"
   const val MENUS = "${BASE_URL}menus"
+  const val MENU_CATEGORIES = "${BASE_URL}menus/{menuId}/categories"
   const val CART = "${BASE_URL}cart"
   const val ADD_TO_CART = "${BASE_URL}cart/item"
 

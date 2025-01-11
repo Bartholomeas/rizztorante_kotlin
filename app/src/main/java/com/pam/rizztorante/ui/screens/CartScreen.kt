@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pam.rizztorante.R
+import com.pam.rizztorante.model.AddToCartRequest
 import com.pam.rizztorante.model.CartItem
 import com.pam.rizztorante.model.CartItemResponse
-import com.pam.rizztorante.model.CartResponse
 import com.pam.rizztorante.network.api.ApiClient
 import kotlinx.coroutines.launch
 
@@ -32,8 +32,7 @@ fun CartScreen() {
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val scope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
+    fun loadCart() {
         scope.launch {
             try {
                 val response = ApiClient.apiService.getCart()
@@ -51,6 +50,42 @@ fun CartScreen() {
         }
     }
 
+    fun removeCartItem(cartItemId: String) {
+        scope.launch {
+            try {
+                val response = ApiClient.apiService.removeCartItem(cartItemId)
+                if (response.isSuccessful) {
+                    cartItems = cartItems.filter { it.id != cartItemId }
+                } else {
+                    errorMessage = "Nie udało się usunąć przedmiotu"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Błąd połączenia"
+            }
+        }
+    }
+
+    fun updateCartItemQuantity(cartItemId: String, quantity: Int) {
+        scope.launch {
+            try {
+                val response =
+                    ApiClient.apiService.updateCartItemQuantity(
+                        cartItemId,
+                        AddToCartRequest(cartItemId, quantity)
+                    )
+                if (response.isSuccessful) {
+                    cartItems =
+                        cartItems.map { if (it.id == cartItemId) it.copy(quantity = quantity) else it }
+                } else {
+                    errorMessage = "Nie udało się zaktualizować ilości"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Błąd połączenia"
+            }
+        }
+    }
+    LaunchedEffect(Unit) { loadCart() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,9 +94,7 @@ fun CartScreen() {
         if (isLoading) {
             CircularProgressIndicator()
         } else {
-            errorMessage?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error)
-            }
+            errorMessage?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
 
             Text(
                 text = "Koszyk",
@@ -73,13 +106,8 @@ fun CartScreen() {
                 items(cartItems) { item ->
                     CartItemCard(
                         item = item,
-                        onRemove = { cartItems = cartItems.filter { it.id != item.id } },
-                        onQuantityChange = { quantity ->
-                            cartItems =
-                                cartItems.map {
-                                    if (it.id == item.id) it.copy(quantity = quantity) else it
-                                }
-                        }
+                        onRemove = { removeCartItem(item.id) },
+                        onQuantityChange = { quantity -> updateCartItemQuantity(item.id, quantity) }
                     )
                 }
             }
@@ -106,6 +134,8 @@ fun CartScreen() {
             ) { Text("Do płatności") }
         }
     }
+
+
 }
 
 @Composable
@@ -126,25 +156,11 @@ fun CartItemCard(item: CartItem, onRemove: () -> Unit, onQuantityChange: (Int) -
                 placeholder = painterResource(R.drawable.ic_launcher_foreground),
                 error = painterResource(R.drawable.ic_launcher_foreground)
             )
-//            AsyncImage(
-//                model = item.coreImageUrl, // Upewnij się, że masz URL do obrazka
-//                contentDescription = item.name,
-//                modifier = Modifier
-//                    .size(80.dp)
-//                    .clip(RoundedCornerShape(8.dp)),
-//                contentScale = ContentScale.Crop,
-//                placeholder = painterResource(R.drawable.ic_launcher_foreground),
-//                error = painterResource(R.drawable.ic_launcher_foreground)
-//            )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Kolumna z nazwą, ilością i ceną
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = item.name,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Text(text = item.name, style = MaterialTheme.typography.titleMedium)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { if (item.quantity > 1) onQuantityChange(item.quantity - 1) }) {
                         Icon(Icons.Default.Remove, contentDescription = "Zmniejsz ilość")

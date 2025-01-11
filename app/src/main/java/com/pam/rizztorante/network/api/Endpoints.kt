@@ -12,4 +12,7 @@ object Endpoints {
 
     const val CART = "${BASE_URL}cart"
     const val ADD_CART_ITEM = "${BASE_URL}cart/item"
+    
+    const val REMOVE_CART_ITEM = "${BASE_URL}cart/item/{cartItemId}"
+    const val UPDATE_CART_ITEM_QUANTITY = "${BASE_URL}cart/item/{cartItemId}"
 }

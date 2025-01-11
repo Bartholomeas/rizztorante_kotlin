@@ -22,9 +22,11 @@ fun LoginScreen(navController: NavController) {
   val scope = rememberCoroutineScope()
 
   Column(
-          modifier = Modifier.fillMaxSize().padding(16.dp),
-          horizontalAlignment = Alignment.CenterHorizontally,
-          verticalArrangement = Arrangement.Center
+          modifier = Modifier
+              .fillMaxSize()
+              .padding(16.dp),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
   ) {
     if (error != null) {
       Text(
